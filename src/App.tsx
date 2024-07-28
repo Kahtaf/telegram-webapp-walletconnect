@@ -1,4 +1,10 @@
-import { useAccount, useConnect, useDisconnect, useSignMessage } from "wagmi";
+import {
+  useAccount,
+  useConnect,
+  useDisconnect,
+  useSignMessage,
+  useSwitchChain,
+} from "wagmi";
 
 window.open = (function (open) {
   return function (url, _, features) {
@@ -11,6 +17,7 @@ function App() {
   const { connectors, connect, status, error } = useConnect();
   const { signMessage, data: signature } = useSignMessage();
   const { disconnect } = useDisconnect();
+  const { switchChainAsync } = useSwitchChain();
 
   return (
     <>
@@ -37,7 +44,10 @@ function App() {
         {connectors.map((connector) => (
           <button
             key={connector.uid}
-            onClick={() => connect({ connector })}
+            onClick={async () => {
+              connect({ connector });
+              await switchChainAsync({ chainId: 14801 });
+            }}
             type="button"
           >
             {connector.name}
@@ -47,7 +57,9 @@ function App() {
         <div>{error?.message}</div>
         {(status === "success" || status === "idle") && (
           <button
-            onClick={() => signMessage({ message: "Hello" })}
+            onClick={async () => {
+              signMessage({ message: "Hello" });
+            }}
             type="button"
           >
             Sign message
