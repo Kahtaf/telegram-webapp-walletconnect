@@ -11,7 +11,7 @@ export default defineConfig({
 			},
 		},
 	},
-	base: "/wc-webview-reproduction/",
+	base: "/",
 
 	plugins: [react()],
 });
