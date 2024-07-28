@@ -9,7 +9,7 @@ window.open = (function (open) {
 function App() {
   const account = useAccount();
   const { connectors, connect, status, error } = useConnect();
-  const { signMessage } = useSignMessage();
+  const { signMessage, data: signature } = useSignMessage();
   const { disconnect } = useDisconnect();
 
   return (
@@ -45,7 +45,7 @@ function App() {
         ))}
         <div>{status}</div>
         <div>{error?.message}</div>
-        {status === "success" && (
+        {(status === "success" || status === "idle") && (
           <button
             onClick={() => signMessage({ message: "Hello" })}
             type="button"
@@ -53,6 +53,7 @@ function App() {
             Sign message
           </button>
         )}
+        {signature && <div>{signature}</div>}
       </div>
     </>
   );
